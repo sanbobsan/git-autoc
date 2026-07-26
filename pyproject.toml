@@ -7,7 +7,9 @@ authors = [
     { name = "sanbob", email = "saintsanbob@gmail.com" }
 ]
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "pydantic-settings>=2.0.0",
+]
 
 [project.scripts]
 app = "app:main"

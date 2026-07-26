@@ -1,5 +1,9 @@
+from app.core.config import settings
+
+
 def main():
-    pass
+    for key, value in settings.model_dump().items():
+        print(f"{key}={value}")
 
 
 if __name__ == "__main__":

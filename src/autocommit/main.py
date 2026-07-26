@@ -32,7 +32,11 @@ def main(
     messages = build_messages(diff, commits, files)
 
     with console.status("Generating commit message..."):
-        result = generate(messages)
+        try:
+            result = generate(messages)
+        except RuntimeError as e:
+            console.print(e, style="red")
+            raise typer.Exit()
 
     console.print(Panel(result, title="Generated Commit Message"))
 

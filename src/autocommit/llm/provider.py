@@ -1,7 +1,11 @@
+import logging
+
 from openai import OpenAI
 from openai.types.chat import ChatCompletionMessageParam
 
 from autocommit.core.config import settings
+
+logger = logging.getLogger(__name__)
 
 
 def generate(messages: list[ChatCompletionMessageParam]) -> str:
@@ -11,12 +15,24 @@ def generate(messages: list[ChatCompletionMessageParam]) -> str:
         api_key=api_key,
     )
 
-    response = client.chat.completions.create(
-        model=settings.openai_model,
-        messages=messages,
-        temperature=settings.openai_temperature,
-        max_tokens=settings.openai_max_tokens,
-    )
+    for attempt in range(2):
+        response = client.chat.completions.create(
+            model=settings.openai_model,
+            messages=messages,
+            temperature=settings.openai_temperature,
+            max_tokens=settings.openai_max_tokens,
+        )
 
-    content = response.choices[0].message.content
-    return content or ""
+        content = response.choices[0].message.content
+        if content:
+            return content
+
+        logger.warning(
+            "Empty response from model %s (attempt %d)",
+            settings.openai_model,
+            attempt + 1,
+        )
+
+    raise RuntimeError(
+        f"Empty response from model {settings.openai_model} after 2 attempts"
+    )

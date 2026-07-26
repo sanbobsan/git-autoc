@@ -27,22 +27,22 @@ No body, no bullet list, no extra text.
 
 Write like a human describing the change. Be concise.
 
+Always respond with a commit message, even for trivial changes.
+Never return an empty response. Describe exactly what changed.
+
 Answer ONLY the commit message. No backticks, no markdown."""
 
 
 def build_messages(
-    diff: str, recent_commits: list[str]
+    diff: str, recent_commits: list[str], changed_files: list[str] | None = None
 ) -> list[ChatCompletionMessageParam]:
     context = "\n".join(recent_commits) if recent_commits else "(no recent commits)"
 
-    user_prompt = f"""Recent commits for context:
-{context}
-
-Staged diff:
-```diff
-{diff}
-```"""
-
+    parts = [f"Recent commits for context:\n{context}"]
+    if changed_files:
+        parts.append("Changed files:\n" + "\n".join(f"  {f}" for f in changed_files))
+    parts.append(f"Staged diff:\n```diff\n{diff}\n```")
+    user_prompt = "\n\n".join(parts)
     return [
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "user", "content": user_prompt},

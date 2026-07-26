@@ -6,6 +6,7 @@ from autocommit.git.utils import (
     commit,
     get_recent_commits,
     get_staged_diff,
+    get_staged_files,
     has_staged_changes,
 )
 from autocommit.llm.prompt import build_messages
@@ -27,7 +28,8 @@ def main(
 
     diff = get_staged_diff()
     commits = get_recent_commits(5)
-    messages = build_messages(diff, commits)
+    files = get_staged_files()
+    messages = build_messages(diff, commits, files)
 
     with console.status("Generating commit message..."):
         result = generate(messages)

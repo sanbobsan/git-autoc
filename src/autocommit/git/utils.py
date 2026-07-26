@@ -24,6 +24,19 @@ def get_staged_diff(cwd: Path | None = None) -> str:
     return result.stdout
 
 
+def get_staged_files(cwd: Path | None = None) -> list[str]:
+    result = subprocess.run(
+        ["git", "diff", "--cached", "--name-only"],
+        cwd=cwd,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        return []
+    return [f for f in result.stdout.splitlines() if f]
+
+
 def get_recent_commits(n: int = 5, cwd: Path | None = None) -> list[str]:
     result = subprocess.run(
         ["git", "log", f"-{n}", "--oneline"],

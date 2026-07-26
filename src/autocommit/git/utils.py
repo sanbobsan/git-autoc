@@ -60,3 +60,15 @@ def commit(message: str, cwd: Path | None = None) -> str:
     )
     result.check_returncode()
     return result.stdout
+
+
+def commit_edit(message: str, cwd: Path | None = None) -> bool:
+    try:
+        proc = subprocess.run(
+            ["git", "commit", "-e", "-m", message],
+            cwd=cwd,
+            check=False,
+        )
+        return proc.returncode == 0
+    except KeyboardInterrupt:
+        return False

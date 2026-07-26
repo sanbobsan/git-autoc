@@ -1,9 +1,11 @@
 import typer
 from rich.console import Console
 from rich.panel import Panel
+from rich.prompt import Prompt
 
 from autocommit.git.utils import (
     commit,
+    commit_edit,
     get_recent_commits,
     get_staged_diff,
     get_staged_files,
@@ -64,6 +66,20 @@ def main(
 
     console.print(Panel(result, title="Generated Commit Message"))
 
-    if not dry_run and typer.confirm("Commit?"):
+    if dry_run:
+        return
+
+    try:
+        action = Prompt.ask("Commit?", choices=["y", "N", "e"], default="N")
+    except KeyboardInterrupt:
+        console.print("\nAborted", style="yellow")
+        raise typer.Exit()
+
+    if action == "y":
         output = commit(result)
-        console.print(f"Created commit: {output.strip()}", style="bold green")
+        console.print(output.strip(), style="bold green")
+    elif action == "e":
+        if commit_edit(result):
+            console.print("Committed", style="bold green")
+        else:
+            console.print("Commit aborted", style="yellow")

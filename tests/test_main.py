@@ -28,15 +28,66 @@ def test_no_staged_changes(git_repo: Path, monkeypatch: pytest.MonkeyPatch) -> N
     assert "No staged changes found" in result.stdout
 
 
-def test_dry_run_without_flag_shows_prompt(
+def test_commit_action_calls_commit(
     staged_repo: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.chdir(staged_repo)
     mock_message = "chore: test commit"
-    with patch("autocommit.main.generate", return_value=mock_message):
+    with (
+        patch("autocommit.main.generate", return_value=mock_message),
+        patch("autocommit.main.commit", return_value="ok") as mock_commit,
+    ):
         result = runner.invoke(app, [], input="y\n")
 
     assert result.exit_code == 0
+    mock_commit.assert_called_once_with(mock_message)
+    assert mock_message in result.stdout
+
+
+def test_edit_action_calls_commit_edit(
+    staged_repo: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.chdir(staged_repo)
+    mock_message = "chore: test commit"
+    with (
+        patch("autocommit.main.generate", return_value=mock_message),
+        patch("autocommit.main.commit_edit", return_value=True) as mock_edit,
+    ):
+        result = runner.invoke(app, [], input="e\n")
+
+    assert result.exit_code == 0
+    mock_edit.assert_called_once_with(mock_message)
+    assert "Committed" in result.stdout
+
+
+def test_edit_action_aborted(
+    staged_repo: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.chdir(staged_repo)
+    mock_message = "chore: test commit"
+    with (
+        patch("autocommit.main.generate", return_value=mock_message),
+        patch("autocommit.main.commit_edit", return_value=False),
+    ):
+        result = runner.invoke(app, [], input="e\n")
+
+    assert result.exit_code == 0
+    assert "Commit aborted" in result.stdout
+
+
+def test_no_action_does_nothing(
+    staged_repo: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.chdir(staged_repo)
+    mock_message = "chore: test commit"
+    with (
+        patch("autocommit.main.generate", return_value=mock_message),
+        patch("autocommit.main.commit") as mock_commit,
+    ):
+        result = runner.invoke(app, [], input="N\n")
+
+    assert result.exit_code == 0
+    mock_commit.assert_not_called()
     assert mock_message in result.stdout
 
 

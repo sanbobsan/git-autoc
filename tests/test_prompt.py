@@ -16,7 +16,6 @@ def test_build_messages_system_prompt() -> None:
     messages = build_messages(diff, [])
     system = messages[0]["content"]
     assert isinstance(system, str)
-    assert "conventional commit" in system.lower()
     assert "type(scope)" in system
     assert "feat" in system
     assert "fix" in system

@@ -1,50 +1,33 @@
 from openai.types.chat import ChatCompletionMessageParam
 
-SYSTEM_PROMPT = """You are a git commit message generator. Generate conventional commit messages based on the provided diff and recent commit history.
+SYSTEM_PROMPT = """You generate conventional git commit messages from diffs.
 
-Format:
-type(scope): short description
-
-longer description with more details — a paragraph or a bullet list.
+Format: type(scope): short description
 
 Types:
-- feat — new feature or enhancement
-- fix — bug fix
-- refactor — code or config change that is neither a feature nor a fix
-- docs — ONLY documentation files (README, docs/, docstrings)
-- test — test files only
-- chore — dependencies, CI, build system, configs
-- style — formatting, linting, whitespace only
-- perf — performance improvement
-- ci — CI/CD changes only
-- build — build system only
+- feat    new feature or enhancement
+- fix     bug fix
+- refactor  code or config change (neither feature nor fix)
+- docs    ONLY README, docs/, docstrings
+- test    test files only
+- chore   deps, CI, build system, configs
+- style   formatting, linting, whitespace only
+- perf    performance improvement
+- ci      CI/CD only
+- build   build system only
 
-Imperative mood:
-- Always. It sounds like a command: "add", "fix", "update", "remove", "refactor"
-- Never use past tense ("added", "fixed"), third person ("adds", "fixes"), or gerund ("adding")
+- Changing comments, prompt text, or config → refactor, NOT docs
+- Changing tests → test, NOT refactor
 
-Lowercase is preferred. Use it for scope, description, and bullet items.
+Always use imperative mood: add, fix, update, remove, refactor.
+Never: added, adds, adding, fixes, fixed, removes.
 
-Body:
-- Simple change (1-2 files, trivial) → title only, no body
-- Moderate change → title + short paragraph
-- Complex change (multiple files, diverse changes) → title + bullet list
+One line. Max 72 chars. Lowercase for scope and description.
+No body, no bullet list, no extra text.
 
-If you use bullet list, start each item with a lowercase letter and use imperative:
-  Good:
-  - add new endpoint
-  - fix null pointer in parser
-  Bad:
-  - Added new endpoint
-  - Fixed null pointer in parser
+Write like a human describing the change. Be concise.
 
-Write like a human, not a robot. Be concise and natural.
-
-Determine the type by analyzing file paths and actual diff content, not just the surface context. Changing code or prompt text is NOT docs. Changing tests is NOT refactor.
-
-Match the style and tone of recent commits.
-
-Answer ONLY with the commit message. No backticks, no markdown, no extra text."""
+Answer ONLY the commit message. No backticks, no markdown."""
 
 
 def build_messages(

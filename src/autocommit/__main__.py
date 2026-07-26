@@ -1,4 +1,4 @@
-from autocommit.main import main
+from autocommit.main import app
 
 if __name__ == "__main__":
-    main()
+    app()

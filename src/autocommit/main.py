@@ -1,4 +1,6 @@
 import typer
+from rich.console import Console
+from rich.panel import Panel
 
 from autocommit.git.utils import (
     commit,
@@ -9,6 +11,7 @@ from autocommit.git.utils import (
 from autocommit.llm.prompt import build_messages
 from autocommit.llm.provider import generate
 
+console = Console()
 app = typer.Typer()
 
 
@@ -19,16 +22,18 @@ def main(
     ),
 ) -> None:
     if not has_staged_changes():
-        typer.echo("No staged changes found")
+        console.print("No staged changes found", style="yellow")
         raise typer.Exit()
 
     diff = get_staged_diff()
     commits = get_recent_commits(5)
     messages = build_messages(diff, commits)
-    result = generate(messages)
 
-    typer.echo(result)
+    with console.status("Generating commit message..."):
+        result = generate(messages)
+
+    console.print(Panel(result, title="Generated Commit Message"))
 
     if not dry_run and typer.confirm("Commit?"):
         output = commit(result)
-        typer.echo(output)
+        console.print(f"Created commit: {output.strip()}", style="bold green")

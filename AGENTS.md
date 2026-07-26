@@ -12,6 +12,7 @@ CLI-утилита для автоматической генерации и с�
 | Package manager | `uv` (uv_build) |
 | Config | `pydantic-settings` — `.env` + env vars |
 | AI client | `openai` (OpenAI-compatible API) |
+| UI | `rich` (Panel, Console, spinner) |
 | Linter | `ruff` (imports, all rules, formatter) |
 | Type checker | `ty` |
 | Project layout | `src/` layout (`src/app/`) |
@@ -137,6 +138,6 @@ Layered design:
 1. `core/config.py` — configuration
 2. `git/` — interface to git operations
 3. `llm/` — AI provider + prompt construction
-4. `main.py` — CLI, wires everything together
+4. `main.py` — CLI (Typer), UI (Rich), wires everything together
 
 Each layer imports only from layers above it (core → git → llm → main).

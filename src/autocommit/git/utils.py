@@ -34,3 +34,15 @@ def get_recent_commits(n: int = 5, cwd: Path | None = None) -> list[str]:
     )
     result.check_returncode()
     return [line.strip() for line in result.stdout.splitlines() if line.strip()]
+
+
+def commit(message: str, cwd: Path | None = None) -> str:
+    result = subprocess.run(
+        ["git", "commit", "-m", message],
+        cwd=cwd,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    result.check_returncode()
+    return result.stdout

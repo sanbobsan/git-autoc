@@ -22,7 +22,7 @@ Types:
 Always use imperative mood: add, fix, update, remove, refactor.
 Never: added, adds, adding, fixes, fixed, removes.
 
-One line. Max 72 chars. Lowercase for scope and description.
+One line. Max 80 chars. Lowercase for scope and description.
 No body, no bullet list, no extra text.
 
 Write like a human describing the change. Be concise.

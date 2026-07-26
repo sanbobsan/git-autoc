@@ -24,20 +24,17 @@ CLI-утилита для автоматической генерации и с�
 src/app/
 ├── __init__.py          # empty
 ├── __main__.py          # from app.main import main; main()
-├── main.py              # CLI entry point
+├── main.py              # CLI: argparse, wires all layers
 ├── core/
 │   ├── __init__.py      # empty
 │   └── config.py        # pydantic-settings Settings
 ├── git/
 │   ├── __init__.py
-│   └── utils.py         # git diff, log, commit helpers
-├── llm/
-│   ├── __init__.py
-│   ├── client.py        # openai client factory
-│   └── prompt.py        # prompt building
-└── commit/
+│   └── utils.py         # diff, log, stage, commit helpers
+└── llm/
     ├── __init__.py
-    └── generator.py     # high-level commit generation logic
+    ├── provider.py      # generate(messages) -> str via openai
+    └── prompt.py        # build system + user messages from git context
 ```
 
 ---
@@ -139,7 +136,6 @@ Layered design:
 1. `core/config.py` — configuration
 2. `git/` — interface to git operations
 3. `llm/` — AI provider + prompt construction
-4. `commit/` — high-level orchestration
-5. `main.py` — CLI, wires everything together
+4. `main.py` — CLI, wires everything together
 
-Each layer imports only from layers above it (core → git → llm → commit → main).
+Each layer imports only from layers above it (core → git → llm → main).

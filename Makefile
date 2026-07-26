@@ -1,6 +1,6 @@
 
 run:
-	uv run -m app
+	uv run -m autocommit
 
 format:
 	uv run ruff check --select I --fix src/

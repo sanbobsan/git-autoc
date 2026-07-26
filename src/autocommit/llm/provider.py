@@ -1,7 +1,7 @@
 from openai import OpenAI
 from openai.types.chat import ChatCompletionMessageParam
 
-from app.core.config import settings
+from autocommit.core.config import settings
 
 
 def generate(messages: list[ChatCompletionMessageParam]) -> str:

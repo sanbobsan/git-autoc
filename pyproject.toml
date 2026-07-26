@@ -1,7 +1,7 @@
 [project]
-name = "app"
+name = "autocommit"
 version = "0.1.0"
-description = "Add your description here"
+description = "AI-powered git commit message generator"
 readme = "docs/README.md"
 authors = [
     { name = "sanbob", email = "saintsanbob@gmail.com" }
@@ -13,7 +13,7 @@ dependencies = [
 ]
 
 [project.scripts]
-app = "app:main"
+git-ac = "autocommit.main:main"
 
 [build-system]
 requires = ["uv_build>=0.11.24,<0.12.0"]

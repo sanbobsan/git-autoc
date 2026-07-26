@@ -1,4 +1,4 @@
-from app.core.config import settings
+from autocommit.core.config import settings
 
 
 def main():

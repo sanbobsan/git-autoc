@@ -32,7 +32,8 @@ def get_recent_commits(n: int = 5, cwd: Path | None = None) -> list[str]:
         text=True,
         check=False,
     )
-    result.check_returncode()
+    if result.returncode != 0:
+        return []
     return [line.strip() for line in result.stdout.splitlines() if line.strip()]
 
 

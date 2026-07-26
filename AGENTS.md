@@ -42,12 +42,13 @@ src/app/
 ## Make Commands
 
 ```makefile
-run        uv run -m app
+run        uv run -m autocommit
 format     ruff check --select I --fix src/ && ruff check --fix src/ && ruff format src/
-check      ty check src/ && ruff check src/ && ruff format --check src/
+test       uv run pytest -v
+check      ty check src/ && ruff check src/ tests/ && ruff format --check src/ tests/
 ```
 
-Always run `make check` before finishing a task.
+Always run `make check` and `make test` before finishing a task. New code must include tests.
 
 ---
 

@@ -1,4 +1,5 @@
 from autocommit.llm.prompt import build_messages
+from autocommit.llm.style import BodyStyle, CommitStyle
 
 
 def test_build_messages_structure() -> None:
@@ -46,3 +47,51 @@ def test_build_messages_empty_commits() -> None:
     user = messages[1]["content"]
     assert isinstance(user, str)
     assert "no recent commits" in user.lower()
+
+
+def test_style_none_forbids_body() -> None:
+    diff = ""
+    messages = build_messages(diff, [], style=CommitStyle(body=BodyStyle.NONE))
+    system = messages[0]["content"]
+    assert "No body" in system
+    assert "bullet list" in system
+
+
+def test_style_long_allows_body() -> None:
+    diff = ""
+    messages = build_messages(diff, [], style=CommitStyle(body=BodyStyle.LONG))
+    system = messages[0]["content"]
+    assert "Body is optional" in system
+
+
+def test_style_list_forces_bullets() -> None:
+    diff = ""
+    messages = build_messages(diff, [], style=CommitStyle(body=BodyStyle.LIST))
+    system = messages[0]["content"]
+    assert "bullet list" in system
+    assert "Always add a body" in system
+
+
+def test_style_desc_forces_paragraph() -> None:
+    diff = ""
+    messages = build_messages(diff, [], style=CommitStyle(body=BodyStyle.DESC))
+    system = messages[0]["content"]
+    assert "single paragraph" in system
+
+
+def test_style_max_chars_respected() -> None:
+    diff = ""
+    messages = build_messages(
+        diff, [], style=CommitStyle(body=BodyStyle.NONE, max_chars=100)
+    )
+    system = messages[0]["content"]
+    assert "100 chars" in system
+    assert "No body" in system
+
+
+def test_default_style_is_none() -> None:
+    diff = ""
+    messages = build_messages(diff, [])
+    system = messages[0]["content"]
+    assert "No body" in system
+    assert "bullet list" in system

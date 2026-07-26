@@ -35,7 +35,8 @@ src/app/
 └── llm/
     ├── __init__.py
     ├── provider.py      # generate(messages) -> str via openai
-    └── prompt.py        # build system + user messages from git context
+    ├── prompt.py        # build system + user messages from git context
+    └── style.py         # BodyStyle enum, CommitStyle dataclass
 ```
 
 ---

@@ -15,7 +15,7 @@ dependencies = [
 ]
 
 [project.scripts]
-git-ac = "autocommit.main:app"
+git-autoc = "autocommit.main:app"
 
 [build-system]
 requires = ["uv_build>=0.11.24,<0.12.0"]

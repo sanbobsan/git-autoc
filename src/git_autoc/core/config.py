@@ -1,3 +1,4 @@
+import shutil
 from pathlib import Path
 
 from pydantic import BaseModel
@@ -69,6 +70,10 @@ def create_default_config() -> str:
         lines.append(f"{key} = {rendered}  # {comment}".rstrip())
     CONFIG_PATH.write_text("\n".join(lines) + "\n", encoding="utf-8")
     return str(CONFIG_PATH)
+
+
+def clear_config() -> None:
+    shutil.rmtree(CONFIG_DIR, ignore_errors=True)
 
 
 def set_config_value(key: str, value: str) -> None:

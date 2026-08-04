@@ -6,6 +6,7 @@ from git_autoc.core import config as config_module
 from git_autoc.core.config import (
     ConfigError,
     Settings,
+    clear_config,
     create_default_config,
     load_settings,
     set_config_value,
@@ -113,3 +114,16 @@ def test_set_config_value_creates_file(isolated_config: Path) -> None:
     set_config_value("openai_model", "gpt-test")
     assert isolated_config.exists()
     assert load_settings().openai_model == "gpt-test"
+
+
+def test_clear_config_removes_dir(isolated_config: Path) -> None:
+    create_default_config()
+    assert isolated_config.exists()
+    clear_config()
+    assert isolated_config.exists() is False
+    assert isolated_config.parent.exists() is False
+
+
+def test_clear_config_idempotent(isolated_config: Path) -> None:
+    clear_config()
+    clear_config()

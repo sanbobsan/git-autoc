@@ -204,3 +204,37 @@ def test_mutual_exclusion(staged_repo: Path, monkeypatch: pytest.MonkeyPatch) ->
 
     assert result.exit_code == 0
     assert "Use only one" in result.stdout
+
+
+def test_config_clear_removes_config(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from git_autoc.core import config as config_module
+
+    monkeypatch.setattr(config_module, "CONFIG_PATH", tmp_path / "config.toml")
+    monkeypatch.setattr(config_module, "CONFIG_DIR", tmp_path)
+    monkeypatch.setattr(config_module, "settings", config_module.load_settings())
+    config_module.create_default_config()
+    assert (tmp_path / "config.toml").exists()
+
+    result = runner.invoke(app, ["config", "clear"])
+
+    assert result.exit_code == 0
+    assert "Config cleared" in result.stdout
+    assert (tmp_path / "config.toml").exists() is False
+    assert tmp_path.exists() is False
+
+
+def test_config_clear_no_config(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from git_autoc.core import config as config_module
+
+    monkeypatch.setattr(config_module, "CONFIG_PATH", tmp_path / "config.toml")
+    monkeypatch.setattr(config_module, "CONFIG_DIR", tmp_path)
+    monkeypatch.setattr(config_module, "settings", config_module.load_settings())
+
+    result = runner.invoke(app, ["config", "clear"])
+
+    assert result.exit_code == 0
+    assert "No config found" in result.stdout

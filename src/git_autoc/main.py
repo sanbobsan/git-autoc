@@ -143,3 +143,14 @@ def set(key: str) -> None:
         raise typer.Exit()
     config_module.settings = config_module.load_settings()
     console.print("Config updated", style="green")
+
+
+@config_app.command()
+def clear() -> None:
+    """Remove the config file and directory"""
+    if not config_module.CONFIG_PATH.exists():
+        console.print("No config found", style="yellow")
+        raise typer.Exit()
+    config_module.clear_config()
+    config_module.settings = config_module.load_settings()
+    console.print("Config cleared", style="green")

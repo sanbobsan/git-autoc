@@ -44,6 +44,37 @@ def test_commit_action_calls_commit(
     assert mock_message in result.stdout
 
 
+def test_commit_action_uppercase_y(
+    staged_repo: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.chdir(staged_repo)
+    mock_message = "chore: test commit"
+    with (
+        patch("autocommit.main.generate", return_value=mock_message),
+        patch("autocommit.main.commit", return_value="ok") as mock_commit,
+    ):
+        result = runner.invoke(app, [], input="Y\n")
+
+    assert result.exit_code == 0
+    mock_commit.assert_called_once_with(mock_message)
+
+
+def test_edit_action_uppercase_e(
+    staged_repo: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.chdir(staged_repo)
+    mock_message = "chore: test commit"
+    with (
+        patch("autocommit.main.generate", return_value=mock_message),
+        patch("autocommit.main.commit_edit", return_value=True) as mock_edit,
+    ):
+        result = runner.invoke(app, [], input="E\n")
+
+    assert result.exit_code == 0
+    mock_edit.assert_called_once_with(mock_message)
+    assert "Committed" in result.stdout
+
+
 def test_edit_action_calls_commit_edit(
     staged_repo: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:

@@ -83,7 +83,9 @@ def main(
         return
 
     try:
-        action = Prompt.ask("Commit?", choices=["y", "N", "e"], default="N")
+        action = Prompt.ask(
+            "Commit?", choices=["y", "N", "e"], default="N", case_sensitive=False
+        )
     except KeyboardInterrupt:
         console.print("\nAborted", style="yellow")
         raise typer.Exit()

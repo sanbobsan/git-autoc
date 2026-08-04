@@ -1,4 +1,4 @@
-# autocommit
+# git-autoc
 
 AI-powered git commit message generator. Reads your staged changes and writes a conventional commit message using any OpenAI-compatible API.
 
@@ -54,7 +54,7 @@ git autoc --dry-run
 
 ## Configuration
 
-Configuration lives in `~/.config/autocommit/config.toml`.
+Configuration lives in `~/.config/git-autoc/config.toml`.
 
 Show the current configuration (creates a default file on first run):
 
@@ -92,7 +92,7 @@ make test    # run tests (pytest)
 ### Project layout
 
 ```
-src/autocommit/
+src/git_autoc/
 ├── main.py           # CLI (typer), wires all layers
 ├── core/config.py    # settings, TOML loading, config management
 ├── git/utils.py      # git operations (diff, log, stage, commit)

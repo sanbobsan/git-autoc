@@ -1,5 +1,5 @@
-from autocommit.llm.prompt import build_messages
-from autocommit.llm.style import BodyStyle, CommitStyle
+from git_autoc.llm.prompt import build_messages
+from git_autoc.llm.style import BodyStyle, CommitStyle
 
 
 def test_build_messages_structure() -> None:

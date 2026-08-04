@@ -4,8 +4,8 @@ from unittest.mock import patch
 import pytest
 from typer.testing import CliRunner
 
-from autocommit.git.utils import has_staged_changes
-from autocommit.main import app
+from git_autoc.git.utils import has_staged_changes
+from git_autoc.main import app
 
 runner = CliRunner()
 
@@ -15,7 +15,7 @@ def test_dry_run_generates_message(
 ) -> None:
     monkeypatch.chdir(staged_repo)
     mock_message = "feat(test): add test feature"
-    with patch("autocommit.main.generate", return_value=mock_message):
+    with patch("git_autoc.main.generate", return_value=mock_message):
         result = runner.invoke(app, ["--dry-run"])
 
     assert result.exit_code == 0
@@ -33,7 +33,7 @@ def test_suggest_stage_all_yes(
     unstaged_repo: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.chdir(unstaged_repo)
-    with patch("autocommit.main.generate", return_value="feat(test): add feature"):
+    with patch("git_autoc.main.generate", return_value="feat(test): add feature"):
         result = runner.invoke(app, ["--dry-run"], input="y\n")
 
     assert result.exit_code == 0
@@ -44,7 +44,7 @@ def test_suggest_stage_all_no(
     unstaged_repo: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.chdir(unstaged_repo)
-    with patch("autocommit.main.generate") as mock:
+    with patch("git_autoc.main.generate") as mock:
         result = runner.invoke(app, ["--dry-run"], input="n\n")
 
     assert result.exit_code == 0
@@ -56,7 +56,7 @@ def test_no_unstaged_changes_no_prompt(
     git_repo: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.chdir(git_repo)
-    with patch("autocommit.main.generate") as mock:
+    with patch("git_autoc.main.generate") as mock:
         result = runner.invoke(app, ["--dry-run"])
 
     assert result.exit_code == 0
@@ -71,8 +71,8 @@ def test_commit_action_calls_commit(
     monkeypatch.chdir(staged_repo)
     mock_message = "chore: test commit"
     with (
-        patch("autocommit.main.generate", return_value=mock_message),
-        patch("autocommit.main.commit", return_value="ok") as mock_commit,
+        patch("git_autoc.main.generate", return_value=mock_message),
+        patch("git_autoc.main.commit", return_value="ok") as mock_commit,
     ):
         result = runner.invoke(app, [], input="y\n")
 
@@ -87,8 +87,8 @@ def test_commit_action_uppercase_y(
     monkeypatch.chdir(staged_repo)
     mock_message = "chore: test commit"
     with (
-        patch("autocommit.main.generate", return_value=mock_message),
-        patch("autocommit.main.commit", return_value="ok") as mock_commit,
+        patch("git_autoc.main.generate", return_value=mock_message),
+        patch("git_autoc.main.commit", return_value="ok") as mock_commit,
     ):
         result = runner.invoke(app, [], input="Y\n")
 
@@ -102,8 +102,8 @@ def test_edit_action_uppercase_e(
     monkeypatch.chdir(staged_repo)
     mock_message = "chore: test commit"
     with (
-        patch("autocommit.main.generate", return_value=mock_message),
-        patch("autocommit.main.commit_edit", return_value=True) as mock_edit,
+        patch("git_autoc.main.generate", return_value=mock_message),
+        patch("git_autoc.main.commit_edit", return_value=True) as mock_edit,
     ):
         result = runner.invoke(app, [], input="E\n")
 
@@ -118,8 +118,8 @@ def test_edit_action_calls_commit_edit(
     monkeypatch.chdir(staged_repo)
     mock_message = "chore: test commit"
     with (
-        patch("autocommit.main.generate", return_value=mock_message),
-        patch("autocommit.main.commit_edit", return_value=True) as mock_edit,
+        patch("git_autoc.main.generate", return_value=mock_message),
+        patch("git_autoc.main.commit_edit", return_value=True) as mock_edit,
     ):
         result = runner.invoke(app, [], input="e\n")
 
@@ -134,8 +134,8 @@ def test_edit_action_aborted(
     monkeypatch.chdir(staged_repo)
     mock_message = "chore: test commit"
     with (
-        patch("autocommit.main.generate", return_value=mock_message),
-        patch("autocommit.main.commit_edit", return_value=False),
+        patch("git_autoc.main.generate", return_value=mock_message),
+        patch("git_autoc.main.commit_edit", return_value=False),
     ):
         result = runner.invoke(app, [], input="e\n")
 
@@ -149,8 +149,8 @@ def test_no_action_does_nothing(
     monkeypatch.chdir(staged_repo)
     mock_message = "chore: test commit"
     with (
-        patch("autocommit.main.generate", return_value=mock_message),
-        patch("autocommit.main.commit") as mock_commit,
+        patch("git_autoc.main.generate", return_value=mock_message),
+        patch("git_autoc.main.commit") as mock_commit,
     ):
         result = runner.invoke(app, [], input="N\n")
 
@@ -161,7 +161,7 @@ def test_no_action_does_nothing(
 
 def test_long_flag(staged_repo: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.chdir(staged_repo)
-    with patch("autocommit.main.generate") as mock:
+    with patch("git_autoc.main.generate") as mock:
         mock.return_value = "feat: test"
         runner.invoke(app, ["--dry-run", "--long"])
 
@@ -173,7 +173,7 @@ def test_long_flag(staged_repo: Path, monkeypatch: pytest.MonkeyPatch) -> None:
 
 def test_list_flag(staged_repo: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.chdir(staged_repo)
-    with patch("autocommit.main.generate") as mock:
+    with patch("git_autoc.main.generate") as mock:
         mock.return_value = "feat: test"
         runner.invoke(app, ["--dry-run", "--list"])
 
@@ -186,7 +186,7 @@ def test_list_flag(staged_repo: Path, monkeypatch: pytest.MonkeyPatch) -> None:
 
 def test_desc_flag(staged_repo: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.chdir(staged_repo)
-    with patch("autocommit.main.generate") as mock:
+    with patch("git_autoc.main.generate") as mock:
         mock.return_value = "feat: test"
         runner.invoke(app, ["--dry-run", "--desc"])
 
@@ -198,7 +198,7 @@ def test_desc_flag(staged_repo: Path, monkeypatch: pytest.MonkeyPatch) -> None:
 
 def test_mutual_exclusion(staged_repo: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.chdir(staged_repo)
-    with patch("autocommit.main.generate") as mock:
+    with patch("git_autoc.main.generate") as mock:
         mock.return_value = "feat: test"
         result = runner.invoke(app, ["--dry-run", "--long", "--list"])
 

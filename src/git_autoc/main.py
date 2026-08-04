@@ -3,8 +3,8 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.prompt import Prompt
 
-from autocommit.core import config as config_module
-from autocommit.git.utils import (
+from git_autoc.core import config as config_module
+from git_autoc.git.utils import (
     commit,
     commit_edit,
     get_recent_commits,
@@ -14,13 +14,13 @@ from autocommit.git.utils import (
     has_unstaged_changes,
     stage_all,
 )
-from autocommit.llm.prompt import build_messages
-from autocommit.llm.provider import generate
-from autocommit.llm.style import BodyStyle, CommitStyle
+from git_autoc.llm.prompt import build_messages
+from git_autoc.llm.provider import generate
+from git_autoc.llm.style import BodyStyle, CommitStyle
 
 console = Console()
 app = typer.Typer(add_completion=False)
-config_app = typer.Typer(help="Manage autocommit configuration")
+config_app = typer.Typer(help="Manage git-autoc configuration")
 app.add_typer(config_app, name="config")
 
 

@@ -1,5 +1,5 @@
 [project]
-name = "autocommit"
+name = "git-autoc"
 version = "0.1.0"
 description = "AI-powered git commit message generator"
 readme = "docs/README.md"
@@ -15,8 +15,8 @@ dependencies = [
 ]
 
 [project.scripts]
-autoc = "autocommit.main:app"
-git-autoc = "autocommit.main:app"
+autoc = "git_autoc.main:app"
+git-autoc = "git_autoc.main:app"
 
 [build-system]
 requires = ["uv_build>=0.11.24,<0.12.0"]

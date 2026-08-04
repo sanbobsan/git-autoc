@@ -2,8 +2,8 @@ from pathlib import Path
 
 import pytest
 
-from autocommit.core import config as config_module
-from autocommit.core.config import (
+from git_autoc.core import config as config_module
+from git_autoc.core.config import (
     ConfigError,
     Settings,
     create_default_config,

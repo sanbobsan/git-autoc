@@ -1,6 +1,6 @@
 from openai.types.chat import ChatCompletionMessageParam
 
-from autocommit.llm.style import BodyStyle, CommitStyle
+from git_autoc.llm.style import BodyStyle, CommitStyle
 
 _BASE = """You generate conventional git commit messages from diffs.
 

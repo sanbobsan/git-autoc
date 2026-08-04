@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from autocommit.git.utils import (
+from git_autoc.git.utils import (
     commit,
     get_recent_commits,
     get_staged_diff,

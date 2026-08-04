@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 REQUIRED = ("openai_base_url", "openai_model")
 
-CONFIG_DIR = Path.home() / ".config" / "autocommit"
+CONFIG_DIR = Path.home() / ".config" / "git-autoc"
 CONFIG_PATH = CONFIG_DIR / "config.toml"
 
 _STR_KEYS = ("openai_base_url", "openai_model", "openai_api_key")
@@ -59,7 +59,7 @@ def validate_settings(settings: Settings) -> None:
 def create_default_config() -> str:
     CONFIG_DIR.mkdir(parents=True, exist_ok=True)
     settings = load_settings()
-    lines = ["# autocommit configuration", ""]
+    lines = ["# git-autoc configuration", ""]
     for key, value in settings.model_dump().items():
         comment = _COMMENTS.get(key, "")
         if isinstance(value, str):

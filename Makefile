@@ -1,6 +1,6 @@
 
 run:
-	uv run -m autocommit
+	uv run -m git_autoc
 
 format:
 	uv run ruff check --select I --fix src/ tests/

@@ -1,4 +1,4 @@
-from autocommit.main import app
+from git_autoc.main import app
 
 if __name__ == "__main__":
     app()

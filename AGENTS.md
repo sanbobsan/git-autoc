@@ -10,7 +10,7 @@ CLI-утилита для автоматической генерации и с�
 |---|---|
 | Language | Python 3.13+ |
 | Package manager | `uv` (uv_build) |
-| Config | `pydantic` + `tomllib` — `~/.config/autocommit/config.toml` |
+| Config | `pydantic` + `tomllib` — `~/.config/git-autoc/config.toml` |
 | AI client | `openai` (OpenAI-compatible API) |
 | UI | `rich` (Panel, Console, spinner) |
 | Linter | `ruff` (imports, all rules, formatter) |
@@ -44,7 +44,7 @@ src/app/
 ## Make Commands
 
 ```makefile
-run        uv run -m autocommit
+run        uv run -m git_autoc
 format     ruff check --select I --fix src/ && ruff check --fix src/ && ruff format src/
 test       uv run pytest -v
 check      ty check src/ && ruff check src/ tests/ && ruff format --check src/ tests/
@@ -98,7 +98,7 @@ Always run `make check` and `make test` before finishing a task. New code must i
 
 ## Config Conventions
 
-Settings are defined in `src/autocommit/core/config.py` using `pydantic.BaseModel` and loaded from `~/.config/autocommit/config.toml` (read-only via `tomllib`).
+Settings are defined in `src/git_autoc/core/config.py` using `pydantic.BaseModel` and loaded from `~/.config/git-autoc/config.toml` (read-only via `tomllib`).
 
 ```python
 class Settings(BaseModel):

@@ -3,7 +3,7 @@ import logging
 from openai import OpenAI
 from openai.types.chat import ChatCompletionMessageParam
 
-from autocommit.core.config import settings
+from git_autoc.core.config import settings
 
 logger = logging.getLogger(__name__)
 

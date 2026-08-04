@@ -15,6 +15,7 @@ dependencies = [
 ]
 
 [project.scripts]
+autoc = "autocommit.main:app"
 git-autoc = "autocommit.main:app"
 
 [build-system]

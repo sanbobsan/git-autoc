@@ -11,6 +11,8 @@ from autocommit.git.utils import (
     get_staged_diff,
     get_staged_files,
     has_staged_changes,
+    has_unstaged_changes,
+    stage_all,
 )
 from autocommit.llm.prompt import build_messages
 from autocommit.llm.provider import generate
@@ -45,8 +47,27 @@ def main(
         raise typer.Exit()
 
     if not has_staged_changes():
-        console.print("No staged changes found", style="yellow")
-        raise typer.Exit()
+        if has_unstaged_changes():
+            try:
+                stage = Prompt.ask(
+                    "No staged changes. Stage all changes?",
+                    choices=["y", "N"],
+                    default="N",
+                    case_sensitive=False,
+                )
+            except KeyboardInterrupt:
+                console.print("\nAborted", style="yellow")
+                raise typer.Exit()
+            if stage != "y":
+                console.print("No staged changes found", style="yellow")
+                raise typer.Exit()
+            stage_all()
+            if not has_staged_changes():
+                console.print("No staged changes found", style="yellow")
+                raise typer.Exit()
+        else:
+            console.print("No staged changes found", style="yellow")
+            raise typer.Exit()
 
     try:
         config_module.validate_settings(config_module.settings)

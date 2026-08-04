@@ -43,3 +43,10 @@ def staged_repo(git_repo: Path) -> Path:
         ["git", "add", "feature.py"], cwd=git_repo, capture_output=True, check=True
     )
     return git_repo
+
+
+@pytest.fixture
+def unstaged_repo(git_repo: Path) -> Path:
+    new_file = git_repo / "new.txt"
+    new_file.write_text("not staged\n")
+    return git_repo

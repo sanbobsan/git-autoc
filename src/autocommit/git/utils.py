@@ -12,6 +12,36 @@ def has_staged_changes(cwd: Path | None = None) -> bool:
     return result.returncode != 0
 
 
+def has_unstaged_changes(cwd: Path | None = None) -> bool:
+    diff = subprocess.run(
+        ["git", "diff", "--quiet"],
+        cwd=cwd,
+        capture_output=True,
+        check=False,
+    )
+    if diff.returncode != 0:
+        return True
+    status = subprocess.run(
+        ["git", "status", "--porcelain"],
+        cwd=cwd,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return any(line.startswith("??") for line in status.stdout.splitlines())
+
+
+def stage_all(cwd: Path | None = None) -> None:
+    result = subprocess.run(
+        ["git", "add", "-A"],
+        cwd=cwd,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    result.check_returncode()
+
+
 def get_staged_diff(cwd: Path | None = None) -> str:
     result = subprocess.run(
         ["git", "diff", "--cached"],

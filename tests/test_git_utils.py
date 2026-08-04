@@ -5,6 +5,8 @@ from autocommit.git.utils import (
     get_recent_commits,
     get_staged_diff,
     has_staged_changes,
+    has_unstaged_changes,
+    stage_all,
 )
 
 
@@ -13,6 +15,28 @@ def test_no_staged_changes(git_repo: Path) -> None:
 
 
 def test_has_staged_changes(staged_repo: Path) -> None:
+    assert has_staged_changes(staged_repo) is True
+
+
+def test_no_unstaged_changes(git_repo: Path) -> None:
+    assert has_unstaged_changes(git_repo) is False
+
+
+def test_has_unstaged_tracked_change(git_repo: Path) -> None:
+    tracked = git_repo / "init.txt"
+    tracked.write_text("modified")
+    assert has_unstaged_changes(git_repo) is True
+
+
+def test_has_unstaged_untracked_file(git_repo: Path) -> None:
+    (git_repo / "untracked.txt").write_text("new")
+    assert has_unstaged_changes(git_repo) is True
+
+
+def test_stage_all(staged_repo: Path) -> None:
+    untracked = staged_repo / "new.txt"
+    untracked.write_text("new")
+    stage_all(staged_repo)
     assert has_staged_changes(staged_repo) is True
 
 

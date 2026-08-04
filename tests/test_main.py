@@ -4,6 +4,7 @@ from unittest.mock import patch
 import pytest
 from typer.testing import CliRunner
 
+from autocommit.git.utils import has_staged_changes
 from autocommit.main import app
 
 runner = CliRunner()
@@ -26,6 +27,42 @@ def test_no_staged_changes(git_repo: Path, monkeypatch: pytest.MonkeyPatch) -> N
     result = runner.invoke(app, ["--dry-run"])
     assert result.exit_code == 0
     assert "No staged changes found" in result.stdout
+
+
+def test_suggest_stage_all_yes(
+    unstaged_repo: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.chdir(unstaged_repo)
+    with patch("autocommit.main.generate", return_value="feat(test): add feature"):
+        result = runner.invoke(app, ["--dry-run"], input="y\n")
+
+    assert result.exit_code == 0
+    assert has_staged_changes(unstaged_repo) is True
+
+
+def test_suggest_stage_all_no(
+    unstaged_repo: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.chdir(unstaged_repo)
+    with patch("autocommit.main.generate") as mock:
+        result = runner.invoke(app, ["--dry-run"], input="n\n")
+
+    assert result.exit_code == 0
+    mock.assert_not_called()
+    assert "No staged changes found" in result.stdout
+
+
+def test_no_unstaged_changes_no_prompt(
+    git_repo: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.chdir(git_repo)
+    with patch("autocommit.main.generate") as mock:
+        result = runner.invoke(app, ["--dry-run"])
+
+    assert result.exit_code == 0
+    mock.assert_not_called()
+    assert "No staged changes found" in result.stdout
+    assert "Stage all changes?" not in result.stdout
 
 
 def test_commit_action_calls_commit(

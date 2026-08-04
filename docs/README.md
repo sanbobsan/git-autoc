@@ -12,12 +12,29 @@ AI-powered git commit message generator. Reads your staged changes and writes a 
 - Works with any **OpenAI-compatible API** (Ollama, LM Studio, OpenAI, …)
 - Configuration managed **from the CLI** — no `.env`
 
+## Installation
+
+Requires Python 3.13+.
+
+Run the latest version without installing anything:
+
+```bash
+uvx git-autoc --help
+```
+
+Or install it as a command so `git-autoc` lands on your PATH:
+
+```bash
+uv tool install git-autoc
+git-autoc --help
+```
+
 ## Usage
 
 Stage the changes you want to commit, then run:
 
 ```bash
-git autoc
+uvx git-autoc
 ```
 
 The tool generates a commit message, shows it, and asks how to proceed:
@@ -29,7 +46,7 @@ The tool generates a commit message, shows it, and asks how to proceed:
 To generate without committing (or to preview the message first):
 
 ```bash
-git autoc --dry-run
+uvx git-autoc --dry-run
 ```
 
 ### Options
@@ -59,13 +76,13 @@ Configuration lives in `~/.config/git-autoc/config.toml`.
 Show the current configuration (creates a default file on first run):
 
 ```bash
-git autoc config
+uvx git-autoc config
 ```
 
 Set a value interactively:
 
 ```bash
-git autoc config set openai_model
+uvx git-autoc config set openai_model
 ```
 
 ### Settings

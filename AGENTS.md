@@ -10,7 +10,7 @@ CLI-утилита для автоматической генерации и с�
 |---|---|
 | Language | Python 3.13+ |
 | Package manager | `uv` (uv_build) |
-| Config | `pydantic-settings` — `.env` + env vars |
+| Config | `pydantic` + `tomllib` — `~/.config/autocommit/config.toml` |
 | AI client | `openai` (OpenAI-compatible API) |
 | UI | `rich` (Panel, Console, spinner) |
 | Linter | `ruff` (imports, all rules, formatter) |
@@ -85,9 +85,9 @@ Always run `make check` and `make test` before finishing a task. New code must i
 
 ### Pydantic
 
-- `Settings` class uses `SettingsConfigDict(env_file=".env")`.
-- Module-level singleton: `settings = Settings()`.
-- Required fields have no default; optional fields have defaults.
+- `Settings` class uses `pydantic.BaseModel` (no `.env`).
+- Module-level singleton: `settings = load_settings()`.
+- All fields have defaults.
 
 ### Error handling
 
@@ -98,23 +98,20 @@ Always run `make check` and `make test` before finishing a task. New code must i
 
 ## Config Conventions
 
-Settings are defined in `src/app/core/config.py` using `pydantic.BaseSettings`.
+Settings are defined in `src/autocommit/core/config.py` using `pydantic.BaseModel` and loaded from `~/.config/autocommit/config.toml` (read-only via `tomllib`).
 
 ```python
-class Settings(BaseSettings):
-    openai_base_url: str        # required
-    openai_model: str           # required
-    openai_api_key: str         # required
+class Settings(BaseModel):
+    openai_base_url: str = "http://localhost:11434/v1"
+    openai_model: str = "model"
+    openai_api_key: str = ""
     openai_temperature: float = 0.2
     openai_max_tokens: int = 512
-
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
-
-
-settings = Settings()
 ```
 
-Env vars override `.env`, which is in `.gitignore`. Template at `.env.example`.
+- Managed via `git autoc config` (create/show) and `git autoc config set <key>` (interactive).
+- `load_settings()` loads the TOML file; `validate_settings()` enforces `REQUIRED` non-empty fields at generate time.
+- No `.env` support. `.env.example` kept only as reference.
 
 ---
 

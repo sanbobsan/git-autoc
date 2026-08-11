@@ -128,6 +128,15 @@ class Settings(BaseModel):
 - No merge commits — use rebase.
 - Never commit unless explicitly asked.
 
+### Version Bumping
+
+- Version lives only in `pyproject.toml` → `[project] version`.
+- Workflow:
+  1. Update `version` in `pyproject.toml`.
+  2. Commit: `chore(pyproject): bump version to X.Y.Z`
+  3. Tag with a lightweight tag: `git tag vX.Y.Z`
+  4. Build artifacts: `uv build` (outputs to gitignored `dist/`)
+
 ---
 
 ## Architecture

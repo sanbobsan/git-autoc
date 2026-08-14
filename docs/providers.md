@@ -9,7 +9,7 @@ git-autoc works with any OpenAI-compatible API. The only things it needs are a b
 Run a local Ollama server and pull a model:
 
 ```bash
-ollama pull llama3.2
+ollama pull carstenuhlig/omnicoder-9b:q4_k_m
 ollama serve
 ```
 
@@ -20,7 +20,9 @@ git autoc config set openai_base_url
 git autoc config set openai_model
 ```
 
-Enter `http://localhost:11434/v1` for the base URL and `llama3.2` (or any pulled model) for the model. Leave the API key empty.
+Enter `http://localhost:11434/v1` for the base URL and `carstenuhlig/omnicoder-9b:q4_k_m` (or any pulled model) for the model. Leave the API key empty.
+
+I run git-autoc with `omnicoder-9b:q4_k_m` and like the results — it's a solid default to start with.
 
 ## LM Studio
 
@@ -52,9 +54,9 @@ Any service exposing an OpenAI-compatible `/v1` endpoint works the same way: set
 A full `config.toml` for a local Ollama setup looks like this:
 
 ```toml
-openai_base_url = "http://localhost:11434/v1"  # Base URL of the OpenAI-compatible API
-openai_model = "llama3.2"                      # Model name to use
-openai_api_key = ""                            # API key (leave empty for local providers)
-openai_temperature = 0.2                       # Sampling temperature (0-1, lower is more deterministic)
-openai_max_tokens = 512                        # Maximum tokens to generate in the response
+openai_base_url = "http://localhost:11434/v1"       # Base URL of the OpenAI-compatible API
+openai_model = "carstenuhlig/omnicoder-9b:q4_k_m"   # Model name to use
+openai_api_key = ""                                 # API key (leave empty for local providers)
+openai_temperature = 0.2                            # Sampling temperature (0-1, lower is more deterministic)
+openai_max_tokens = 512                             # Maximum tokens to generate in the response
 ```

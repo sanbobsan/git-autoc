@@ -16,25 +16,42 @@ AI-powered git commit message generator. Reads your staged changes and writes a 
 
 Requires Python 3.13+.
 
-Run the latest version without installing anything:
+### Run without installing
+
+Run the latest version from PyPI without installing anything:
 
 ```bash
 uvx git-autoc --help
 ```
 
-Or install it as a command so `git-autoc` lands on your PATH:
+### Install as a command
+
+Install it once with `uv tool install`:
 
 ```bash
 uv tool install git-autoc
 git-autoc --help
 ```
 
+This puts two commands on your PATH:
+
+- `git-autoc` — a native git subcommand, so `git autoc` just works in any repository
+- `autoc` — a short standalone alias
+
+To remove it later:
+
+```bash
+uv tool uninstall git-autoc
+```
+
 ## Usage
+
+Both installation modes work the same. This guide uses `git autoc`; replace it with `uvx git-autoc` or `autoc` as you prefer.
 
 Stage the changes you want to commit, then run:
 
 ```bash
-uvx git-autoc
+git autoc
 ```
 
 The tool generates a commit message, shows it, and asks how to proceed:
@@ -43,10 +60,12 @@ The tool generates a commit message, shows it, and asks how to proceed:
 - `e` — open the editor to adjust the message before committing
 - `N` (default) — abort, keep changes staged
 
+If nothing is staged but there are unstaged changes, you are asked whether to stage everything first. If the repository is clean, the tool exits.
+
 To generate without committing (or to preview the message first):
 
 ```bash
-uvx git-autoc --dry-run
+git autoc --dry-run
 ```
 
 ### Options
@@ -76,13 +95,19 @@ Configuration lives in `~/.config/git-autoc/config.toml`.
 Show the current configuration (creates a default file on first run):
 
 ```bash
-uvx git-autoc config
+git autoc config
 ```
 
 Set a value interactively:
 
 ```bash
-uvx git-autoc config set openai_model
+git autoc config set openai_model
+```
+
+Remove the config file and directory:
+
+```bash
+git autoc config clear
 ```
 
 ### Settings

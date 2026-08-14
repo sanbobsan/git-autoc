@@ -122,24 +122,13 @@ git autoc config clear
 
 `openai_base_url` and `openai_model` are required and must be non-empty; the tool refuses to run otherwise.
 
+## Guides
+
+- [Providers](https://github.com/sanbobsan/auto-commit/blob/main/docs/providers.md) — configure Ollama, LM Studio, OpenAI, or any other OpenAI-compatible API
+- [Troubleshooting](https://github.com/sanbobsan/auto-commit/blob/main/docs/TROUBLESHOOTING.md) — error messages and their fixes
+- [Contributing](https://github.com/sanbobsan/auto-commit/blob/main/docs/CONTRIBUTING.md) — development setup, conventions, and releasing
+
 ## Development
-
-```bash
-make run     # run the CLI
-make format  # format code (ruff)
-make check   # type check (ty) + lint + format check
-make test    # run tests (pytest)
-```
-
-### Project layout
-
-```
-src/git_autoc/
-├── main.py           # CLI (typer), wires all layers
-├── core/config.py    # settings, TOML loading, config management
-├── git/utils.py      # git operations (diff, log, stage, commit)
-└── llm/              # prompt building, provider, commit styles
-```
 
 ### Stack
 
@@ -147,3 +136,5 @@ src/git_autoc/
 - **Config:** pydantic + tomllib
 - **AI client:** openai (OpenAI-compatible API)
 - **Quality:** ruff, ty, pytest
+
+For development setup, make commands, conventions, and releasing, see [Contributing](https://github.com/sanbobsan/auto-commit/blob/main/docs/CONTRIBUTING.md).

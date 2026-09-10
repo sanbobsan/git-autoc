@@ -38,10 +38,7 @@ def test_render_successful_substitution():
     result = template.render(values)
 
     assert result == "Stats: five commits vs four commits for Alex."
-    assert (
-        template.complete_template
-        == "Stats: five commits vs four commits for Alex."
-    )
+    assert template.complete_template == "Stats: five commits vs four commits for Alex."
 
 
 def test_render_leaves_missing_blocks_as_is():
